@@ -1,22 +1,25 @@
-import bingo.BingoCard;
-import bingo.BingoUtils;
+import bng.biz.BingoCardBuilder;
+import bng.biz.BingoRawBuilder;
+import bng.data.BingoRawCard;
+import bng.util.BingoUtilities;
 
 import java.util.List;
 import java.util.Map;
 
 public class BRunner {
     public static void main(String[] args) {
-        BingoUtils bingoUtils = new BingoUtils();
-
-        BingoCard card = new BingoCard(bingoUtils);
+        BingoUtilities bingoUtilities = new BingoUtilities();
+        BingoRawCard card = new BingoRawCard();
+        BingoRawBuilder bingoRawBuilder = new BingoRawBuilder(bingoUtilities);
+        BingoCardBuilder bingoCardBuilder = new BingoCardBuilder(bingoUtilities);
 
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 10_000; i++) {
-            Map<Integer, List<Integer>> strips = card.spreadTheNumbersToStrips();
-            //bingoUtils.printStripMap(strips);
-            card.prepareCard(strips);
-            card.printCard();
-            card.clearCard();
+        for (int i = 0; i < 1; i++) {
+            List<Integer> remainingNumbers = bingoRawBuilder.splitCardNumbersToTickets(card);
+            bingoRawBuilder.splitRemainingsToTickets(card, remainingNumbers);
+            Map<Integer, Map<Integer, Map<Integer, Integer>>> result = bingoCardBuilder.buildTickets(card);
+
+            bingoCardBuilder.printCard(result);
         }
         long end = System.currentTimeMillis();
 
